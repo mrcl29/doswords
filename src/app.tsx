@@ -4,7 +4,7 @@ import ChatWindow from "./components/ChatWindow.tsx";
 import ChatInput from "./components/ChatInput.tsx";
 // import { getSessionId } from "./utils/session.ts";
 import callApiFreeLLM from "./api/callApiFreeLLM.ts";
-import { timeoutTime } from "./constants/constants.ts";
+import { TIMEOUT_TIME } from "./constants/constants.ts";
 
 interface BotState {
   message: string;
@@ -26,7 +26,7 @@ export function App() {
   //   setSessionId(id);
   // }, []);
 
-  const wait = (timeout = timeoutTime) => {
+  const wait = (timeout = TIMEOUT_TIME) => {
     setTimeout(() => {
       setBotState((prev) => ({
         ...prev,

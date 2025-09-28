@@ -3,5 +3,5 @@ export const MAX_CHARS = 500;
 export const MAX_LINES = 3;
 
 // Constante de la API
-const timeoutTimeInSeconds = 5;
-export const timeoutTime = timeoutTimeInSeconds * 1000;
+const TIMEOUT_TIME_IN_SECONDS = 5;
+export const TIMEOUT_TIME = TIMEOUT_TIME_IN_SECONDS * 1000;
