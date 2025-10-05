@@ -67,7 +67,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   }, [disabled]);
 
   return (
-    <div className="flex items-center justify-center w-full max-w-3xl p-2 border rounded-full bg-white gap-2 px-5">
+    <div className="flex items-center justify-center w-full max-w-3xl p-2 border rounded-full bg-white gap-2 px-5 shadow-md hover:scale-101 transition duration-300">
       <div className="text-xs text-gray-500 text-right pr-3">
         {message.length}/{MAX_CHARS}
       </div>
@@ -87,10 +87,9 @@ const ChatInput: React.FC<ChatInputProps> = ({
       />
       <div className="flex-[0.1] flex items-center justify-end">
         <button
-          className={
-            `flex items-center justify-center rounded-full w-auto h-auto p-3 text-white cursor-pointer group
-            ${disabled ? "bg-gray-400 cursor-not-allowed" : "bg-black"}`
-          }
+          className={`flex items-center justify-center rounded-full w-auto h-auto p-3 text-white cursor-pointer active:scale-95
+          transition group
+            ${disabled ? "bg-gray-400 cursor-not-allowed" : "bg-black"}`}
           disabled={disabled}
           onClick={sendMessage}
         >

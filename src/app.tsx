@@ -2,6 +2,7 @@ import "./app.css";
 import { useState } from "preact/hooks";
 import ChatWindow from "./components/ChatWindow.tsx";
 import ChatInput from "./components/ChatInput.tsx";
+import RandomWord from "./components/RandomWord.tsx";
 // import { getSessionId } from "./utils/session.ts";
 import callApiFreeLLM from "./api/callApiFreeLLM.ts";
 import { TIMEOUT_TIME } from "./constants/constants.ts";
@@ -56,11 +57,13 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 w-full h-screen p-4 overflow-hidden">
-      <ChatWindow loading={botState.loading} message={botState.message} />
-      <ChatInput onSend={handleSend} disabled={botState.disabled} />
-    </div>
-  );
+  <div className="flex flex-col items-center justify-start gap-50 w-full h-screen p-4 overflow-hidden">
+    <RandomWord />
+    <ChatWindow loading={botState.loading} message={botState.message} />
+    <ChatInput onSend={handleSend} disabled={botState.disabled} />
+  </div>
+);
+
 }
 
 export default App;
