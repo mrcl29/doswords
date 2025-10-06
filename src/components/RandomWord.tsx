@@ -1,5 +1,7 @@
+import type React from "preact/compat";
+
 interface RandomWordProps {
-  word: string;
+  word: string | React.JSX.Element;
   onNewWord: () => void;
 }
 

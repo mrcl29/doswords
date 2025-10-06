@@ -1,5 +1,6 @@
 import "./app.css";
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
+import { BeatLoader } from "react-spinners";
 import ChatWindow from "./components/ChatWindow.tsx";
 import ChatInput from "./components/ChatInput.tsx";
 import RandomWord from "./components/RandomWord.tsx";
@@ -21,9 +22,22 @@ export function App() {
     disabled: false,
   });
 
-  const [judgeWord, setJudgeWord] = useState<string>(getRandomWord());
+  const [judgeWord, setJudgeWord] = useState<string>("");
   const [oldJudgeWord, setOldJudgeWord] = useState<string>(judgeWord);
   const [userWord, setUserWord] = useState<string>("");
+
+  const [loadingWord, setLoadingWord] = useState(true);
+
+  useEffect(() => {
+    const loadWord = async () => {
+      setLoadingWord(true);
+      const newWord = await getRandomWord();
+      setJudgeWord(newWord);
+      setLoadingWord(false);
+    };
+    loadWord();
+    console.log(judgeWord);
+  }, []);
 
   const wait = (timeout = TIMEOUT_TIME) => {
     setTimeout(() => {
@@ -62,8 +76,10 @@ export function App() {
       {/* Agrupamos RandomWord y Label sin gap extra */}
       <div className="flex flex-col items-center w-full gap-10">
         <RandomWord
-          word={judgeWord}
-          onNewWord={() => setJudgeWord(getRandomWord())}
+          word={loadingWord ? <BeatLoader color="white" /> : judgeWord}
+          onNewWord={() => {
+            getRandomWord().then((newWord) => setJudgeWord(newWord));
+          }}
         />
         <WordLabel judgeWord={oldJudgeWord} userWord={userWord} />
       </div>
