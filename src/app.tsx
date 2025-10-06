@@ -3,9 +3,10 @@ import { useState } from "preact/hooks";
 import ChatWindow from "./components/ChatWindow.tsx";
 import ChatInput from "./components/ChatInput.tsx";
 import RandomWord from "./components/RandomWord.tsx";
-// import { getSessionId } from "./utils/session.ts";
-import callApiFreeLLM from "./api/callApiFreeLLM.ts";
+import WordLabel from "./components/WordLabel.tsx";
+import { sendPrompt } from "./utils/sendPrompt.ts";
 import { TIMEOUT_TIME } from "./constants/constants.ts";
+import { getRandomWord } from "./utils/randomWord";
 
 interface BotState {
   message: string;
@@ -20,12 +21,9 @@ export function App() {
     disabled: false,
   });
 
-  // const [sessionId, setSessionId] = useState<string>("");
-
-  // useEffect(() => {
-  //   const id = getSessionId();
-  //   setSessionId(id);
-  // }, []);
+  const [judgeWord, setJudgeWord] = useState<string>(getRandomWord());
+  const [oldJudgeWord, setOldJudgeWord] = useState<string>(judgeWord);
+  const [userWord, setUserWord] = useState<string>("");
 
   const wait = (timeout = TIMEOUT_TIME) => {
     setTimeout(() => {
@@ -36,34 +34,44 @@ export function App() {
     }, timeout);
   };
 
-  const handleSend = async (msg: string) => {
-    if (!msg.trim()) return;
+  const handleSend = async (userWord: string) => {
+    if (!userWord.trim()) return;
 
     setBotState({ message: "", loading: true, disabled: true });
+    setUserWord(userWord);
+    setOldJudgeWord(judgeWord);
 
-    const { response, timeout } = await callApiFreeLLM(msg);
+    const { response, timeout } = await sendPrompt(judgeWord, userWord);
+
     setBotState((prev) => ({
       ...prev,
       loading: false,
     }));
     wait();
 
-    if (response)
+    if (response) {
       setBotState((prev) => ({
-        ...prev, // conserva los demás campos
-        message: response, // actualiza solo 'message'
+        ...prev,
+        message: response,
       }));
-    else if (timeout) wait(timeout * 1000);
+    } else if (timeout) wait(timeout * 1000);
   };
 
   return (
-  <div className="flex flex-col items-center justify-start gap-50 w-full h-screen p-4 overflow-hidden">
-    <RandomWord />
-    <ChatWindow loading={botState.loading} message={botState.message} />
-    <ChatInput onSend={handleSend} disabled={botState.disabled} />
-  </div>
-);
+    <div className="flex flex-col items-center justify-start gap-23 sm:gap-25 md:gap-40 lg:gap-40 w-full h-screen p-4 overflow-hidden">
+      {/* Agrupamos RandomWord y Label sin gap extra */}
+      <div className="flex flex-col items-center w-full gap-10">
+        <RandomWord
+          word={judgeWord}
+          onNewWord={() => setJudgeWord(getRandomWord())}
+        />
+        <WordLabel judgeWord={oldJudgeWord} userWord={userWord} />
+      </div>
 
+      <ChatWindow loading={botState.loading} message={botState.message} />
+      <ChatInput onSend={handleSend} disabled={botState.disabled} />
+    </div>
+  );
 }
 
 export default App;

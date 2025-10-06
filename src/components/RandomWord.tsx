@@ -1,13 +1,13 @@
-import { useState } from "preact/hooks";
-import { getRandomWord } from "../utils/randomWord";
+interface RandomWordProps {
+  word: string;
+  onNewWord: () => void;
+}
 
-const RandomWord = () => {
-  const [word, setWord] = useState(getRandomWord());
-
+const RandomWord = ({ word, onNewWord }: RandomWordProps) => {
   return (
     <div className="flex flex-col items-center justify-center w-full gap-4">
       <button
-        onClick={() => setWord(getRandomWord())}
+        onClick={onNewWord}
         className="
           px-4 py-2 
           bg-green-600 text-white font-semibold 
@@ -23,7 +23,9 @@ const RandomWord = () => {
         Nueva Palabra
       </button>
 
-      <div className="text-2xl w-full max-w-80 bg-black rounded-full p-2 text-white font-bold shadow-md select-none">{word}</div>
+      <div className="text-2xl w-full max-w-80 bg-black rounded-2xl py-4 text-white font-bold shadow-md select-none">
+        {word}
+      </div>
     </div>
   );
 };

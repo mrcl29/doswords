@@ -1,7 +1,11 @@
 import React from "react";
 import { useState, useRef, useEffect } from "preact/hooks";
 import { FiSend } from "react-icons/fi";
-import { MAX_CHARS, MAX_LINES } from "../constants/constants.ts";
+import {
+  MAX_CHARS,
+  MAX_LINES,
+  ALLOWES_CHARS_REGEX,
+} from "../constants/constants.ts";
 
 interface ChatInputProps {
   placeholder?: string;
@@ -10,7 +14,7 @@ interface ChatInputProps {
 }
 
 const ChatInput: React.FC<ChatInputProps> = ({
-  placeholder = "Escribe un mensaje...",
+  placeholder = "Escribe tu palabra...",
   onSend,
   disabled = false,
 }) => {
@@ -43,21 +47,31 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
   const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     if (disabled) return;
-    const value = (e.target as HTMLTextAreaElement).value;
+
+    let value = (e.target as HTMLTextAreaElement).value;
+
+    // 1. Quitar saltos de línea
+    value = value.replace(/[\n\r]/g, "");
+
+    // 2. Filtrar: solo letras, espacios y acentos
+    value = value
+      .split("")
+      .filter((char) => ALLOWES_CHARS_REGEX.test(char))
+      .join("");
+
+    // 3. Limitar longitud
     setMessage(value.slice(0, MAX_CHARS));
   };
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (disabled) return;
+    const preventEnter = (e: KeyboardEvent) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         sendMessage();
       }
     };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", preventEnter);
+    return () => window.removeEventListener("keydown", preventEnter);
   }, [message, disabled]);
 
   useEffect(() => {
@@ -97,7 +111,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
             className={
               disabled
                 ? ""
-                : "transition-transform duration-200 group-hover:scale-110"
+                : "transition-transform duration-200 group-hover:scale-120"
             }
           />
         </button>

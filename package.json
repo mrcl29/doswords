@@ -1,7 +1,10 @@
 {
-  "name": "workspace",
+  "name": "doswords",
+  "version": "1.0.0",
+  "description": "Doswords: juego de asociación creativa con Preact y Tailwind",
+  "author": "Marc Llobera Villalonga",
   "private": true,
-  "version": "0.0.0",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite",

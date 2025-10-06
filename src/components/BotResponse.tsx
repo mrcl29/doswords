@@ -7,7 +7,7 @@ const BotResponse: React.FC<BotResponseProps> = ({ message = "" }) => {
 
   return (
     <div className="flex flex-col gap-2 w-full max-w-3xl">
-      <div className="flex justify-start p-2 bg-gray-100 rounded-lg">
+      <div className="flex justify-center p-2 bg-gray-100 rounded-lg">
         {message}
       </div>
     </div>

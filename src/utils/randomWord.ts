@@ -1,7 +1,8 @@
 import { DICCIONARIO } from "../constants/diccionario";
 
-export function getRandomWord() {
-    return getRandomElement(DICCIONARIO);
+export function getRandomWord(): string {
+  const element = getRandomElement(DICCIONARIO);
+  return element ? element : "";
 }
 
 function getRandomElement<T>(arr: T[]): T | undefined {
